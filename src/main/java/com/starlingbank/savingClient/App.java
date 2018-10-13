@@ -3,6 +3,7 @@ package com.starlingbank.savingClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.starlingbank.savingClient.domain.entity.Transaction;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,9 +15,11 @@ import java.util.Collections;
 @SpringBootApplication
 public class App implements CommandLineRunner {
 
-    private static final String accessToken = "tvphENxoatUimgNgt30Ek0kk0whNWU0prV7mBfND2MCxXnRfbU9lLd0aCLhAC5GX";
+    @Value("${accessToken}")
+    private String accessToken;
 
-    private static final String getTransactions = "https://api-sandbox.starlingbank.com/api/v1/transactions";
+    @Value("${getTransactionsApiUrl}")
+    private String getTransactions;
 
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
@@ -35,7 +38,7 @@ public class App implements CommandLineRunner {
         HttpHeaders httpHeaders = new HttpHeaders();
 
         httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        httpHeaders.add("user-agent", "");
+        httpHeaders.add("user-agent", "saving-client");
         httpHeaders.add("Authorization", "Bearer " + accessToken);
 
         HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
@@ -44,7 +47,8 @@ public class App implements CommandLineRunner {
 
         JsonNode map = response.getBody();
         ObjectMapper jsonObjectMapper = new ObjectMapper();
-        jsonObjectMapper.treeToValue(map, Transaction.class);
+        Transaction transactions = jsonObjectMapper.treeToValue(map, Transaction.class);
+
     }
 
 }
