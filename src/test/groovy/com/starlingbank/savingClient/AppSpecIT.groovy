@@ -11,9 +11,12 @@ class AppSpecIT extends Specification {
     @Autowired
     WebApplicationContext context
 
-    def "should boot up without errors"() {
+    def "Should boot up without errors"() {
         expect: "web application context exists"
         context != null
+    }
+
+    def "Should call the Transaction services to fetch all transaction"() {
     }
 
 }

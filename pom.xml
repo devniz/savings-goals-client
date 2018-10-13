@@ -145,7 +145,7 @@
                             <goal>repackage</goal>
                         </goals>
                         <configuration>
-                            <finalName>registration-service</finalName>
+                            <finalName>saving-client</finalName>
                         </configuration>
                     </execution>
                 </executions>

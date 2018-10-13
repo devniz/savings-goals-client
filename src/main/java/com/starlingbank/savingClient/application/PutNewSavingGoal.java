@@ -22,8 +22,6 @@ public class PutNewSavingGoal {
 
     private HttpHeaders headers;
 
-    private String currentSavingGoalUid;
-
     public PutNewSavingGoal() {
         ClientHttpRequestFactory factory = new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory());
         this.restTemplate = new RestTemplate(factory);
@@ -32,12 +30,12 @@ public class PutNewSavingGoal {
         this.headers = new HttpHeaders();
         this.headers.setContentType(MediaType.APPLICATION_JSON);
         this.headers.add("user-agent", "saving-client");
-        this.headers.add("Authorization", "Bearer " + "Tort6mt67fJWxMRkRJw9wxrarv8gDkXxrUcCBBzMlXk5emn4GJND65glGog5BYnZ");
+        this.headers.add("Authorization", "Bearer " + "SsbkucXmNaJm5wrppaNFEsj0sZyVtknPPfwyuwg8iLvFKnnjuUaJFA2Eke7pAuAf");
 
-        this.currentSavingGoalUid = UUID.randomUUID().toString();
-        this.newGoalApiUrl = "https://api-sandbox.starlingbank.com/api/v1/savings-goals/" + this.currentSavingGoalUid;
+        String currentSavingGoalUid = UUID.randomUUID().toString();
+        this.newGoalApiUrl = "https://api-sandbox.starlingbank.com/api/v1/savings-goals/" + currentSavingGoalUid;
 
-        this.headers.set("currentSavingGoalUid", this.currentSavingGoalUid);
+        this.headers.set("currentSavingGoalUid", currentSavingGoalUid);
     }
 
     /**
@@ -50,7 +48,11 @@ public class PutNewSavingGoal {
         this.headers.set("currentSavingAmount", saving.toString());
         String bodyRequest = "{\n  \"name\": \"Trip to Paris\",\n  \"currency\": \"GBP\",\n  \"target\": {\n\"currency\": \"GBP\",\n\"minorUnits\": 11223344\n  },\n\"base64EncodedPhoto\": \"string\"\n}";
         HttpEntity<String> request = new HttpEntity<>(bodyRequest, this.headers);
-        restTemplate.exchange(newGoalApiUrl, HttpMethod.PUT, request, JsonNode.class);
+        ResponseEntity response = restTemplate.exchange(newGoalApiUrl, HttpMethod.PUT, request, JsonNode.class);
+
+        if (response.getStatusCode().equals(HttpStatus.OK)) {
+            System.out.println("You successfully saved " + saving + "£ into your new saving goal");
+        }
     }
 
 }

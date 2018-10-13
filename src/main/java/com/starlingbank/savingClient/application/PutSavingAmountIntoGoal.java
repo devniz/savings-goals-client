@@ -32,7 +32,7 @@ public class PutSavingAmountIntoGoal {
         this.headers = new HttpHeaders();
         this.headers.setContentType(MediaType.APPLICATION_JSON);
         this.headers.add("user-agent", "saving-client");
-        this.headers.add("Authorization", "Bearer " + "Tort6mt67fJWxMRkRJw9wxrarv8gDkXxrUcCBBzMlXk5emn4GJND65glGog5BYnZ");
+        this.headers.add("Authorization", "Bearer " + "SsbkucXmNaJm5wrppaNFEsj0sZyVtknPPfwyuwg8iLvFKnnjuUaJFA2Eke7pAuAf");
 
         this.transferUid = UUID.randomUUID().toString();
         this.transferSavingGoalApiUrl = "https://api-sandbox.starlingbank.com/api/v1/savings-goals/" + this.savingGoalUid + "/add-money/" + this.transferUid;
