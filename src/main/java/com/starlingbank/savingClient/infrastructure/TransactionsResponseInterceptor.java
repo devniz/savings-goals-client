@@ -1,15 +1,20 @@
 package com.starlingbank.savingClient.infrastructure;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.starlingbank.savingClient.domain.entity.Transaction;
 import com.starlingbank.savingClient.ui.RoundUpController;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Http interceptor class when we get all Transactions from the API.
@@ -39,10 +44,19 @@ public class TransactionsResponseInterceptor implements ClientHttpRequestInterce
             ClientHttpRequestExecution clientHttpRequestExecution
     ) throws IOException {
         ClientHttpResponse response = clientHttpRequestExecution.execute(httpRequest, bytes);
+        String body = StreamUtils.copyToString(response.getBody(), Charset.defaultCharset());
 
         ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        Map<String, Object> transactionsMap = mapper.convertValue(response.getBody(), Map.class);
+        JsonNode jsonNode = mapper.readTree(body);
+        JsonNode embedded = jsonNode.get("_embedded");
+        JsonNode getTransactions = embedded.get("transactions");
+
+        if (getTransactions != null) {
+            Transaction[] transactions = mapper.treeToValue(getTransactions, Transaction[].class);
+            List<Transaction> transactionList = Arrays.asList(transactions);
+            BigDecimal result = this.roundUpController.calculateRoundUp(transactionList);
+        }
+
         return response;
     }
 

@@ -10,15 +10,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class App implements CommandLineRunner {
 
     @Autowired
-    GetAllTransactions getAllTransactions;
+    private GetAllTransactions getAllTransactions;
 
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
     }
 
     /**
-     * Method to automatically fetch all transaction
-     * And map the response to Transaction entity.
+     * Method to automatically fetch all transactions.
      *
      * @param args
      * @throws Exception
