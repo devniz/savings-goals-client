@@ -35,12 +35,11 @@ public class PutSavingAmountIntoGoal {
         this.headers.add("Authorization", "Bearer " + "Tort6mt67fJWxMRkRJw9wxrarv8gDkXxrUcCBBzMlXk5emn4GJND65glGog5BYnZ");
 
         this.transferUid = UUID.randomUUID().toString();
-        this.transferSavingGoalApiUrl = "https://api-sandbox.starlingbank.com/api/v1/savings-goals/" + savingGoalUid + "/add-money/" + this.transferUid;
+        this.transferSavingGoalApiUrl = "https://api-sandbox.starlingbank.com/api/v1/savings-goals/" + this.savingGoalUid + "/add-money/" + this.transferUid;
     }
 
-
     public void transferSavingGoal() {
-        String body = "{\n  \"amount\": {\n    \"currency\": \"GBP\",\n    \"minorUnits\": 10.98\n  }\n}";
+        String body = "{\n  \"amount\": {\n\"currency\": \"GBP\",\n\"minorUnits\": " + this.savingAmount + "}\n}";
         HttpEntity<String> request = new HttpEntity<>(body, this.headers);
         restTemplate.exchange(this.transferSavingGoalApiUrl, HttpMethod.PUT, request, JsonNode.class);
     }
