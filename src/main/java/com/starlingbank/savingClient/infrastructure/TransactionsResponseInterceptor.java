@@ -43,8 +43,6 @@ public class TransactionsResponseInterceptor implements ClientHttpRequestInterce
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         Map<String, Object> transactionsMap = mapper.convertValue(response.getBody(), Map.class);
-        this.roundUpController.calculateRoundUp(transactionsMap);
-
         return response;
     }
 

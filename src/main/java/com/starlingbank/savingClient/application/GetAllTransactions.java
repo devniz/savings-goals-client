@@ -27,7 +27,7 @@ public class GetAllTransactions {
      */
     public GetAllTransactions(
             @Value("${accessToken}") String accessToken,
-            @Value("${apiTransactionUrl}") String url
+            @Value("${getTransactionsApiUrl}") String url
     ) {
         HttpHeaders headers;
 
