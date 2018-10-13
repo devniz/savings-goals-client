@@ -2,6 +2,7 @@ package com.starlingbank.savingClient.infrastructure;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.starlingbank.savingClient.application.PutNewSavingGoal;
 import com.starlingbank.savingClient.domain.entity.Transaction;
 import com.starlingbank.savingClient.ui.RoundUpController;
 import org.springframework.http.HttpRequest;
@@ -21,13 +22,6 @@ import java.util.List;
  */
 public class TransactionsResponseInterceptor implements ClientHttpRequestInterceptor {
 
-
-    private RoundUpController roundUpController;
-
-    public TransactionsResponseInterceptor() {
-        roundUpController = new RoundUpController();
-    }
-
     /**
      * This will be triggered when the response from starling API come's back
      *
@@ -46,6 +40,9 @@ public class TransactionsResponseInterceptor implements ClientHttpRequestInterce
         ClientHttpResponse response = clientHttpRequestExecution.execute(httpRequest, bytes);
         String body = StreamUtils.copyToString(response.getBody(), Charset.defaultCharset());
 
+        RoundUpController roundUpController = new RoundUpController();
+        PutNewSavingGoal putNewSavingGoal = new PutNewSavingGoal();
+
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(body);
         JsonNode embedded = jsonNode.get("_embedded");
@@ -54,7 +51,12 @@ public class TransactionsResponseInterceptor implements ClientHttpRequestInterce
         if (getTransactions != null) {
             Transaction[] transactions = mapper.treeToValue(getTransactions, Transaction[].class);
             List<Transaction> transactionList = Arrays.asList(transactions);
-            BigDecimal result = this.roundUpController.calculateRoundUp(transactionList);
+            BigDecimal totalSaving = roundUpController.calculateRoundUp(transactionList);
+
+            // There is no point to save 0.00 £.
+            if (totalSaving != null && totalSaving.compareTo(BigDecimal.valueOf(0.00)) != 0) {
+                putNewSavingGoal.createSavingGoal(totalSaving);
+            }
         }
 
         return response;

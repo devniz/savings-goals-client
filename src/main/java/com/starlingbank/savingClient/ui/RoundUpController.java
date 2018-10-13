@@ -1,13 +1,13 @@
 package com.starlingbank.savingClient.ui;
 
 import com.starlingbank.savingClient.domain.entity.Transaction;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Controller
 public class RoundUpController {
 
     /**

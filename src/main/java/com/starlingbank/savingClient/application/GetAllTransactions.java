@@ -7,16 +7,18 @@ import org.springframework.http.*;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 
-@Component
+@Service
 public class GetAllTransactions {
 
     private String apiUrl;
+
     private RestTemplate restTemplate;
+
     private HttpEntity entity;
 
     /**
@@ -39,7 +41,7 @@ public class GetAllTransactions {
 
         headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.add("user-agent", "");
+        headers.add("user-agent", "saving-client");
         headers.add("Authorization", "Bearer " + accessToken);
 
         this.entity = new HttpEntity<>(headers);
