@@ -7,9 +7,11 @@ Spring Boot restTemplate client to fetch all transactions from Starling Bank API
 
 1) Spring boot will start a new local server and ask the Main method to automatically fetch all transactions.
 
-2) An interceptor will capture the response from the API and call the RoundUp method.
+2) TransactionsResponseInterceptor will capture the response from the API and call the RoundUp method.
 
-3) RoundUpController will inject the service to create a new savings goal and finally save it using the API.
+3) RoundUpController calculate roundUp of all transactions amounts and create a new savings goal with generated savingGoalUid.
+
+4) SavingGoalResponseInterceptor will capture the savingGoalUid and store the amount using the API.
 
 
 
