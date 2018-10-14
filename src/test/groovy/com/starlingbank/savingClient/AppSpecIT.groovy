@@ -16,7 +16,4 @@ class AppSpecIT extends Specification {
         context != null
     }
 
-    def "Should call the Transaction services to fetch all transaction"() {
-    }
-
 }

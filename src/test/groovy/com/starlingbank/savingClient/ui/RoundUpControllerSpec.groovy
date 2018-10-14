@@ -26,4 +26,5 @@ class RoundUpControllerSpec extends Specification {
         expect:
         result == 1.58
     }
+
 }
